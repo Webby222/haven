@@ -24,3 +24,68 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes haven-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes haven-image-in {
+  from { opacity: 0; transform: scale(1.06); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.haven-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.haven-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.haven-hero-copy > * {
+  opacity: 0;
+  animation: haven-rise 700ms ease forwards;
+}
+
+.haven-hero-copy > :nth-child(1) { animation-delay: 100ms; }
+.haven-hero-copy > :nth-child(2) { animation-delay: 220ms; }
+.haven-hero-copy > :nth-child(3) { animation-delay: 340ms; }
+.haven-hero-copy > :nth-child(4) { animation-delay: 460ms; }
+
+.haven-hero-copy h1 span {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: haven-rise 700ms ease forwards;
+}
+
+.haven-hero-copy h1 span:nth-child(1) { animation-delay: 220ms; }
+.haven-hero-copy h1 span:nth-child(2) { animation-delay: 300ms; }
+.haven-hero-copy h1 span:nth-child(3) { animation-delay: 380ms; }
+
+.haven-hero-image {
+  animation: haven-image-in 1100ms ease both;
+}
+
+.haven-image-reveal {
+  clip-path: inset(8% 0 8% 0);
+  transition: clip-path 1000ms ease, transform 1000ms ease;
+}
+
+.haven-image-reveal:hover {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  .haven-reveal { opacity: 1; transform: none; }
+}

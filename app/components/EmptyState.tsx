@@ -1,0 +1,3 @@
+export default function EmptyState({ onClear }: { onClear: () => void }) {
+  return <div className="border border-dashed border-[#b9c4c5] bg-white px-6 py-16 text-center"><p className="font-serif text-3xl text-[#162b3d]">No properties match your search.</p><p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[#71808c]">Try adjusting your location, budget or property type.</p><button type="button" onClick={onClear} className="mt-7 border-b-2 border-[#b56d45] pb-2 text-sm font-bold text-[#162b3d]">Clear filters</button></div>;
+}
