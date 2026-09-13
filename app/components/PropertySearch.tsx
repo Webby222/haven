@@ -1,31 +1,31 @@
 "use client";
 
-export type SearchValues = {
-  location: string;
-  propertyType: string;
-  purpose: string;
-  bedrooms: string;
-  budget: string;
-};
+import type { PropertyFilters } from "../../lib/propertyFilters";
+import { properties } from "../../lib/properties";
+
+export type SearchValues = PropertyFilters;
 
 const fields: Array<{ key: keyof SearchValues; label: string; values: string[] }> = [
-  { key: "location", label: "Location", values: ["Ugbowo, Benin City", "GRA, Benin City", "Airport Road, Benin City", "Lekki, Lagos", "Ikeja, Lagos", "Abuja"] },
-  { key: "propertyType", label: "Property type", values: ["2 Bedroom Flat", "3 Bedroom Flat", "Mini Flat", "Serviced Apartment", "Duplex"] },
+  { key: "location", label: "Location", values: Array.from(new Set(properties.map((property) => `${property.location}, ${property.city}`))) },
+  { key: "propertyType", label: "Property type", values: Array.from(new Set(properties.map((property) => property.propertyType))) },
   { key: "purpose", label: "Purpose", values: ["Rent", "Buy"] },
   { key: "bedrooms", label: "Bedrooms", values: ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4 Bedrooms"] },
-  { key: "budget", label: "Budget", values: ["Under ₦1m / year", "₦1m – ₦2m / year", "₦2m – ₦4m / year", "₦4m+ / year"] },
+  { key: "maxPrice", label: "Maximum price", values: ["1000000", "2000000", "4000000", "10000000", "50000000"] },
 ];
 
-export default function PropertySearch({ values, onChange }: { values: SearchValues; onChange: (values: SearchValues) => void }) {
+const priceLabels: Record<string, string> = { "1000000": "₦1m / year", "2000000": "₦2m / year", "4000000": "₦4m / year", "10000000": "₦10m / year", "50000000": "₦50m" };
+
+export default function PropertySearch({ values, onChange, onSubmit }: { values: SearchValues; onChange: (values: SearchValues) => void; onSubmit: () => void }) {
   return (
-    <form className="border border-[#d5d9d6] bg-white p-4 shadow-[0_12px_35px_rgba(22,43,61,0.08)] sm:p-5" onSubmit={(event) => event.preventDefault()}>
+    <form className="border border-[#d5d9d6] bg-white p-4 shadow-[0_12px_35px_rgba(22,43,61,0.08)] sm:p-5" onSubmit={(event) => { event.preventDefault(); onSubmit(); }}>
       <div className="mb-5 flex flex-col gap-2 border-b border-[#e3e6e4] pb-4 sm:flex-row sm:items-center sm:justify-between"><span className="text-sm font-bold text-[#162b3d]">Find your next place</span><span className="text-xs text-[#7b8890]">Search homes across Nigeria</span></div>
+      <label className="mb-4 flex min-h-[54px] cursor-text items-center rounded-[3px] border border-[#cbd5d6] px-4 transition hover:border-[#9eadaf] focus-within:border-[#b56d45] focus-within:shadow-[0_5px_16px_rgba(22,43,61,0.08)]"><span className="mr-4 text-[10px] font-bold uppercase tracking-[0.15em] text-[#71808c]">Search</span><input value={values.searchText} onChange={(event) => onChange({ ...values, searchText: event.target.value })} placeholder="Try “2 bedroom apartment in Ugbowo”" className="w-full bg-transparent text-sm font-semibold text-[#162b3d] outline-none placeholder:font-normal placeholder:text-[#8b99a3]" /></label>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.2fr_1.1fr_0.8fr_0.9fr_1.1fr_auto] lg:items-end">
         {fields.map((field) => <label key={field.key} className="group relative flex min-h-[72px] cursor-pointer flex-col justify-center rounded-[3px] border border-[#cbd5d6] bg-[#fcfdfc] px-4 py-2 transition duration-200 hover:-translate-y-px hover:border-[#9eadaf] hover:bg-white focus-within:border-[#b56d45] focus-within:shadow-[0_5px_16px_rgba(22,43,61,0.08)] lg:px-4">
           <span className="mb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#71808c]">{field.label}</span>
           <select value={values[field.key]} onChange={(event) => onChange({ ...values, [field.key]: event.target.value })} className="w-full cursor-pointer appearance-none bg-transparent pr-6 text-sm font-semibold text-[#162b3d] outline-none">
             <option value="">Any {field.label.toLowerCase()}</option>
-            {field.values.map((value) => <option key={value} value={value}>{value}</option>)}
+            {field.values.map((value) => <option key={value} value={value}>{field.key === "maxPrice" ? priceLabels[value] : value}</option>)}
           </select>
           <span className="pointer-events-none absolute right-4 top-1/2 mt-2 text-sm font-bold text-[#b56d45] transition-transform group-focus-within:rotate-180" aria-hidden="true">⌄</span>
         </label>)}

@@ -13,16 +13,17 @@ export default function PropertyGrid({ properties }: { properties: Property[] })
   return <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     {properties.map((property, index) => <Reveal key={property.id} delay={(index % 3) * 90}>
       <article className="group relative overflow-hidden rounded-[4px] border border-[#dfe3e4] bg-white transition duration-300 hover:-translate-y-1 hover:border-[#c6d0d0] hover:shadow-[0_16px_34px_rgba(22,43,61,0.1)]">
-        <Link href="/properties" className="block" aria-label={`View ${property.title} in ${property.location}`}>
+        <Link href={`/properties/${property.id}`} className="block" aria-label={`View ${property.title} in ${property.location}`}>
           <div className="relative aspect-[1.18/1] overflow-hidden bg-[#e8ecec]">
             <img src={property.image} alt={property.imageAlt} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" />
             <span className="absolute bottom-4 left-4 bg-white/95 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#162b3d]">{property.propertyType}</span>
           </div>
           <div className="p-5 sm:p-6">
-            <p className="text-xs font-medium text-[#71808c]">{property.location}</p>
+            <p className="text-xs font-medium text-[#71808c]">{property.location}, {property.city}</p>
+            <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#b56d45]">For {property.purpose === "sale" ? "sale" : "rent"}</p>
             <h2 className="mt-2 font-serif text-2xl leading-tight text-[#162b3d]">{property.title}</h2>
             <p className="mt-4 text-lg font-bold text-[#b56d45]">{property.price}</p>
-            <div className="mt-5 flex items-center gap-4 border-t border-[#e5e9ea] pt-4 text-xs text-[#71808c]"><span>{property.bedrooms} Bedrooms</span><span>{property.bathrooms} Bathrooms</span><span>{property.parking}</span></div>
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[#e5e9ea] pt-4 text-xs text-[#71808c]"><span>{property.bedrooms} Bedrooms</span><span>{property.bathrooms} Bathrooms</span>{property.parking && <span>{property.parking}</span>}<span>{property.propertyType}</span></div>
             <p className="mt-2 text-xs text-[#8b99a3]">{property.area} <span className="float-right text-sm text-[#b56d45] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span></p>
           </div>
         </Link>
