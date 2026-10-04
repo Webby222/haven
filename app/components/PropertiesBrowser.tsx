@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { properties, type PropertyPurpose } from "../../lib/properties";
+import type { Property, PropertyPurpose } from "../../lib/properties";
 import { filterProperties, type PropertyFilters } from "../../lib/propertyFilters";
 import EmptyState from "./EmptyState";
 import PropertyGrid from "./PropertyGrid";
@@ -9,7 +9,7 @@ import PropertySearch, { type SearchValues } from "./PropertySearch";
 
 const initialSearch: PropertyFilters = { location: "", propertyType: "", purpose: "", bedrooms: "", maxPrice: "", searchText: "" };
 
-export default function PropertiesBrowser({ purpose, initialFilters = initialSearch }: { purpose?: PropertyPurpose; initialFilters?: PropertyFilters }) {
+export default function PropertiesBrowser({ purpose, initialFilters = initialSearch, properties }: { purpose?: PropertyPurpose; initialFilters?: PropertyFilters; properties: Property[] }) {
   const [search, setSearch] = useState<SearchValues>(initialFilters);
   const [appliedSearch, setAppliedSearch] = useState<SearchValues>(initialFilters);
   const [sort, setSort] = useState("newest");
@@ -19,7 +19,7 @@ export default function PropertiesBrowser({ purpose, initialFilters = initialSea
     const result = filterProperties(properties, appliedSearch, purpose);
 
     return [...result].sort((a, b) => sort === "low" ? a.priceValue - b.priceValue : sort === "high" ? b.priceValue - a.priceValue : 0);
-  }, [appliedSearch, purpose, sort]);
+  }, [appliedSearch, properties, purpose, sort]);
 
   const updateSearch = (values: SearchValues) => setSearch(values);
   const applySearch = () => setAppliedSearch(search);

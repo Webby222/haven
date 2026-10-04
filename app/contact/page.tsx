@@ -1,8 +1,26 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Reveal from "../components/Reveal";
+import ContactForm from "./ContactForm";
+import { getPropertyById } from "../../lib/propertyData";
 
-export default function ContactPage() {
+type ContactPageProps = {
+  searchParams: Promise<{ property?: string }>;
+};
+
+export default async function ContactPage({ searchParams }: ContactPageProps) {
+  const { property: propertyId } = await searchParams;
+  let property = null;
+
+  if (propertyId) {
+    try {
+      const match = await getPropertyById(propertyId);
+      if (match) property = { id: match.id, title: match.title, purpose: match.purpose };
+    } catch {
+      property = null;
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#fbfaf8] text-[#162b3d]">
       <Header />
@@ -20,15 +38,7 @@ export default function ContactPage() {
           </div>
         </Reveal>
         <Reveal delay={120} className="bg-[#f2f0eb] p-6 sm:p-10">
-          <form className="space-y-6">
-            <p className="font-serif text-3xl">Send an enquiry</p>
-            <label className="block text-sm font-semibold">Name<input required className="mt-2 min-h-12 w-full border border-[#cbd5d6] bg-white px-4 outline-none transition focus:border-[#b56d45]" /></label>
-            <label className="block text-sm font-semibold">Email<input required type="email" className="mt-2 min-h-12 w-full border border-[#cbd5d6] bg-white px-4 outline-none transition focus:border-[#b56d45]" /></label>
-            <label className="block text-sm font-semibold">Phone<input type="tel" className="mt-2 min-h-12 w-full border border-[#cbd5d6] bg-white px-4 outline-none transition focus:border-[#b56d45]" /></label>
-            <label className="block text-sm font-semibold">Property interest<select defaultValue="General enquiry" className="mt-2 min-h-12 w-full border border-[#cbd5d6] bg-white px-4 outline-none transition focus:border-[#b56d45]"><option>Buy</option><option>Rent</option><option>General enquiry</option></select></label>
-            <label className="block text-sm font-semibold">Message<textarea required rows={5} className="mt-2 w-full border border-[#cbd5d6] bg-white px-4 py-3 outline-none transition focus:border-[#b56d45]" /></label>
-            <button type="submit" className="min-h-12 bg-[#162b3d] px-7 text-sm font-bold text-white transition hover:bg-[#b56d45]">Send enquiry <span className="ml-3" aria-hidden="true">→</span></button>
-          </form>
+          <ContactForm property={property} />
         </Reveal>
       </main>
       <Footer />

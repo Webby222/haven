@@ -1,15 +1,22 @@
-export type PropertyPurpose = "sale" | "rent";
+import type { FacilityId } from "./facilities";
+
+export const propertyPurposeOptions = ["sale", "rent"] as const;
+export type PropertyPurpose = (typeof propertyPurposeOptions)[number];
+
+export const propertyTypeOptions = ["Apartment", "Flat", "Mini Flat", "Self Contain", "Duplex", "Serviced Apartment", "Estate"] as const;
+export type PropertyType = (typeof propertyTypeOptions)[number];
+export type PropertyPricePeriod = "year" | "month" | "sale";
 
 export type Property = {
   id: string;
   title: string;
   purpose: PropertyPurpose;
-  propertyType: "Apartment" | "Flat" | "Mini Flat" | "Self Contain" | "Duplex" | "Serviced Apartment" | "Estate";
+  propertyType: PropertyType;
   location: string;
   city: string;
   price: string;
   priceValue: number;
-  pricePeriod: "year" | "sale";
+  pricePeriod: PropertyPricePeriod;
   bedrooms: number;
   bathrooms: number;
   parking: string;
@@ -21,6 +28,8 @@ export type Property = {
   imageAlt: string;
   description: string;
   features: string[];
+  facilities?: FacilityId[];
+  media?: import("./propertyMedia").PropertyMedia[];
 };
 
 const baseImages = {

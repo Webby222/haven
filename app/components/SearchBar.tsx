@@ -3,15 +3,18 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { properties } from "../../lib/properties";
 import type { PropertyFilters } from "../../lib/propertyFilters";
 
-const locationOptions = Array.from(new Set(properties.map((property) => `${property.location}, ${property.city}`)));
-const propertyTypeOptions = Array.from(new Set(properties.map((property) => property.propertyType)));
 const initialFilters: PropertyFilters = { location: "", propertyType: "", purpose: "", bedrooms: "", maxPrice: "", searchText: "" };
 const priceOptions = [["1000000", "₦1m / year"], ["2000000", "₦2m / year"], ["4000000", "₦4m / year"], ["10000000", "₦10m / year"], ["50000000", "₦50m"]] as const;
 
-export default function SearchBar() {
+type SearchBarProps = {
+  locationOptions: string[];
+  propertyTypeOptions: string[];
+  errorMessage?: string;
+};
+
+export default function SearchBar({ locationOptions, propertyTypeOptions, errorMessage }: SearchBarProps) {
   const router = useRouter();
   const [filters, setFilters] = useState<PropertyFilters>(initialFilters);
 
@@ -27,6 +30,7 @@ export default function SearchBar() {
   return (
     <form className="border border-[#d5d9d6] bg-white p-4 shadow-[0_12px_35px_rgba(22,43,61,0.1)] lg:p-5" onSubmit={submitSearch}>
       <div className="mb-4 flex flex-col gap-2 border-b border-[#e3e6e4] pb-4 sm:flex-row sm:items-center sm:justify-between"><span className="text-sm font-bold text-[#162b3d]">Find your next place</span><span className="text-xs text-[#7b8890]">Search homes across Benin City</span></div>
+      {errorMessage && <p role="status" className="mb-4 text-xs text-[#7e4930]">Property filters are unavailable right now. You can still search by keyword.</p>}
       <label className="mb-4 flex min-h-[52px] cursor-text items-center rounded-[3px] border border-[#cbd5d6] px-4 transition hover:border-[#9eadaf] focus-within:border-[#b56d45] focus-within:shadow-[0_5px_16px_rgba(22,43,61,0.08)]"><span className="mr-4 text-[10px] font-bold uppercase tracking-[0.16em] text-[#71808c]">Search</span><input value={filters.searchText} onChange={(event) => update("searchText", event.target.value)} placeholder="Try “2 bedroom apartment in Ugbowo”" className="w-full bg-transparent text-sm font-semibold text-[#162b3d] outline-none placeholder:font-normal placeholder:text-[#8b99a3]" /></label>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_0.85fr_1fr_auto] lg:items-end">
         <Field label="Location" value={filters.location} onChange={(value) => update("location", value)} options={locationOptions} placeholder="Any location" />

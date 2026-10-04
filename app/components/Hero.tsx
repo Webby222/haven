@@ -1,6 +1,6 @@
-import SearchBar from "./SearchBar";
+import type { ReactNode } from "react";
 
-export default function Hero() {
+export default function Hero({ searchBar }: { searchBar: ReactNode }) {
   return (
     <section id="home" className="bg-white" aria-labelledby="hero-heading">
       <div className="mx-auto grid max-w-7xl gap-0 px-6 py-8 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-12">
@@ -15,7 +15,7 @@ export default function Hero() {
           <div className="absolute inset-0 bg-[#162b3d]/10" />
         </div>
       </div>
-      <div className="haven-hero-copy relative z-10 mx-auto max-w-7xl px-6 pb-12 sm:px-8 lg:-mt-20 lg:px-12 lg:pb-0"><SearchBar /></div>
+      <div className="haven-hero-copy relative z-10 mx-auto max-w-7xl px-6 pb-12 sm:px-8 lg:-mt-20 lg:px-12 lg:pb-0">{searchBar}</div>
     </section>
   );
 }

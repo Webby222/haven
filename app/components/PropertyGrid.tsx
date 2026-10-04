@@ -24,7 +24,7 @@ export default function PropertyGrid({ properties }: { properties: Property[] })
             <h2 className="mt-2 font-serif text-2xl leading-tight text-[#162b3d]">{property.title}</h2>
             <p className="mt-4 text-lg font-bold text-[#b56d45]">{property.price}</p>
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[#e5e9ea] pt-4 text-xs text-[#71808c]"><span>{property.bedrooms} Bedrooms</span><span>{property.bathrooms} Bathrooms</span>{property.parking && <span>{property.parking}</span>}<span>{property.propertyType}</span></div>
-            <p className="mt-2 text-xs text-[#8b99a3]">{property.area} <span className="float-right text-sm text-[#b56d45] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span></p>
+            <p className="mt-2 text-xs text-[#8b99a3]">{property.area !== "N/A" ? property.area : ""} <span className="float-right text-sm text-[#b56d45] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span></p>
           </div>
         </Link>
         <button type="button" aria-label={favourites.includes(property.id) ? `Remove ${property.title} from favourites` : `Add ${property.title} to favourites`} aria-pressed={favourites.includes(property.id)} onClick={() => toggleFavourite(property.id)} className={`absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border text-lg transition ${favourites.includes(property.id) ? "border-[#b56d45] bg-[#b56d45] text-white" : "border-white/70 bg-white/90 text-[#162b3d] hover:border-[#b56d45] hover:text-[#b56d45]"}`}><span aria-hidden="true">{favourites.includes(property.id) ? "♥" : "♡"}</span></button>
